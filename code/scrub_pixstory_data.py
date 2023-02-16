@@ -13,6 +13,9 @@ def scrub_pixstory_data():
                                 .reset_index(name = 'count') 
     pk_duplicates_df = pk_counts_df[pk_counts_df['count'] > 1].set_index(['Story Primary ID', 'Story ID'])
 
+    # only 3 [Story Primary ID]-[Story ID] combinations have more than one [Narrative]
+    # these seem to be outliers and can probably be removed to clean the data
+
     pixstory_clean_df = indexed_pixstory_df[~indexed_pixstory_df.index.isin(pk_duplicates_df.index)]
 
     # export data
