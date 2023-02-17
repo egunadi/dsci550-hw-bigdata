@@ -3,6 +3,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from pathlib import Path 
 import glob
 import pandas as pd
+from collections import defaultdict
+import re
 
 sarc_directory_path = "data/sarcasm/data-sarc-sample/sarc"
 notsarc_directory_path = "data/sarcasm/data-sarc-sample/notsarc"
@@ -41,12 +43,21 @@ def flag_pixstory_sarc():
     notsarc_terms = get_terms(notsarc_directory_path)
 
     pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
+    
+    sarc_counts = defaultdict(int)
+    notsarc_counts = defaultdict(int)
 
+    # for pixstory in pixstory_df:
+    #     for sarc_term in sarc_terms:
+    #         if re.search(sarc_term, pixstory['Narrative'], re.IGNORECASE):
+    #             sarc_counts[pixstory['index']] += 1
+        
     return pixstory_df
+    # return sarc_counts
 
 df = flag_pixstory_sarc()
 
-print(df)
+print(df.loc[:, ['Story Primary ID', 'Story ID', 'Narrative']])
 
 
 

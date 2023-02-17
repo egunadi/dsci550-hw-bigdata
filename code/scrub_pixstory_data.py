@@ -1,7 +1,7 @@
 import pandas as pd
 
 def scrub_pixstory_data():
-    pixstory_filepath = "../data/pixstory/pixstory.csv"
+    pixstory_filepath = "data/pixstory/pixstory.csv"
 
     # import data
     pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
@@ -16,10 +16,10 @@ def scrub_pixstory_data():
     # only 3 [Story Primary ID]-[Story ID] combinations have more than one [Narrative]
     # these seem to be outliers and can probably be removed to clean the data
 
-    pixstory_clean_df = indexed_pixstory_df[~indexed_pixstory_df.index.isin(pk_duplicates_df.index)]
+    pixstory_clean_df = indexed_pixstory_df[~indexed_pixstory_df.index.isin(pk_duplicates_df.index)].reset_index()
 
     # export data
-    pixstory_clean_df.to_csv('../data/pixstory/pixstory_clean.csv', encoding='utf-8', index=False)
+    pixstory_clean_df.to_csv('data/pixstory/pixstory_clean.csv', encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     scrub_pixstory_data()
