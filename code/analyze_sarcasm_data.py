@@ -6,9 +6,9 @@ import pandas as pd
 from collections import defaultdict
 import re
 
-sarc_directory_path = "data/sarcasm/data-sarc-sample/sarc"
-notsarc_directory_path = "data/sarcasm/data-sarc-sample/notsarc"
-pixstory_filepath = "data/pixstory/pixstory_clean.csv"
+sarc_directory_path = "../data/sarcasm/data-sarc-sample/sarc"
+notsarc_directory_path = "../data/sarcasm/data-sarc-sample/notsarc"
+pixstory_filepath = "../data/pixstory/pixstory_clean.csv"
 
 def get_terms(directory_path: str) -> list:
     text_files = glob.glob(f"{directory_path}/*.txt")
@@ -47,17 +47,21 @@ def flag_pixstory_sarc():
     sarc_counts = defaultdict(int)
     notsarc_counts = defaultdict(int)
 
-    # for pixstory in pixstory_df:
-    #     for sarc_term in sarc_terms:
-    #         if re.search(sarc_term, pixstory['Narrative'], re.IGNORECASE):
-    #             sarc_counts[pixstory['index']] += 1
+    for pixstory in pixstory_df:
+        for sarc_term in sarc_terms:
+            if re.search(sarc_term, pixstory['Narrative'], re.IGNORECASE):
+                # pixstory['sarc_count'] += 1
+                None
         
     return pixstory_df
     # return sarc_counts
 
 df = flag_pixstory_sarc()
 
-print(df.loc[:, ['Story Primary ID', 'Story ID', 'Narrative']])
+# filtered_df = df[df['Story Primary ID']]
+# print(df.loc[:, ['Story Primary ID', 'Story ID', 'Narrative']])
+
+print(df)
 
 
 

@@ -1,7 +1,7 @@
 import pandas as pd
 
 def scrub_pixstory_data():
-    pixstory_filepath = "data/pixstory/pixstory.csv"
+    pixstory_filepath = "../data/pixstory/pixstory.csv"
 
     # import data
     pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
