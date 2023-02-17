@@ -40,6 +40,11 @@ def get_terms(directory_path: str) -> list:
 
     # payload
     tfidf_list = tfidf_df['term'].unique().tolist()
+
+    with open('../data/sarcasm/sarc_keywords.txt', mode='w', encoding='utf-8') as file:
+        for word in tfidf_list:
+            file.write(f"{word}\n")
+
     return tfidf_list
 
 def split_pixstory_words():
@@ -82,10 +87,5 @@ def flag_pixstory_sarc():
 
     pixstory_df.to_csv('../data/pixstory/pixstory_sarc.csv', encoding='utf-8', index=False)
 
-flag_pixstory_sarc()
-
-
-
-
-
-
+if __name__ == '__main__':
+    flag_pixstory_sarc()
