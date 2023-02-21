@@ -56,8 +56,9 @@ def ff2022():
 
     return ff2022
 
+
 # Film Festivals 2021
-# FEBRUARY
+# FEBRUARY 2021
 def ff2021_feb():
     # web scraping
     URL = "https://www.film-fest-report.com/home/film-festivals-february-2021"
@@ -112,7 +113,8 @@ def ff2021_feb():
     
     return festivals_2021_feb, dates2_2021_feb
 
-# MARCH
+
+# MARCH 2021
 def ff2021_mar():
     # web scraping
     URL = "https://www.film-fest-report.com/home/film-festivals-march-2021"
@@ -161,7 +163,8 @@ def ff2021_mar():
 
     return festivals_2021_mar, dates2_2021_mar
 
-# APRIL
+
+# APRIL 2021
 def ff2021_apr():
     # web scraping
     URL = "https://www.film-fest-report.com/home/film-festivals-april-2021"
@@ -206,7 +209,8 @@ def ff2021_apr():
 
     return festivals_2021_apr, dates2_2021_apr
 
-# MAY
+
+# MAY 2021
 def ff2021_may():
     # web scraping
     URL = "https://www.film-fest-report.com/home/film-festivals-may-2021"
@@ -251,7 +255,8 @@ def ff2021_may():
 
     return festivals_2021_may, dates2_2021_may
 
-# JUNE
+
+# JUNE 2021
 def ff2021_jun():
     # web scraping 2021 jun
     URL = "https://www.film-fest-report.com/home/film-festivals-june-2021"
@@ -296,7 +301,8 @@ def ff2021_jun():
 
     return festivals_2021_jun, dates2_2021_jun
 
-# JULY
+
+# JULY 2021
 def ff2021_july():
     # web scraping 2021 july
     URL = "https://www.film-fest-report.com/home/film-festivals-july-2021"
@@ -343,7 +349,8 @@ def ff2021_july():
 
     return festivals_2021_july, dates2_2021_july
 
-# OCTOBER
+
+# OCTOBER 2021
 def ff2021_oct():
     # web scraping
     URL = "https://www.film-fest-report.com/home/film-festivals-october-2021"
@@ -392,7 +399,8 @@ def ff2021_oct():
 
     return festivals_2021_oct, dates2_2021_oct
 
-# NOVEMBER
+
+# NOVEMBER 2021
 def ff2021_nov():
     # web scraping 2021 nov
     URL = "https://www.film-fest-report.com/home/film-festivals-november-2021"
@@ -403,7 +411,7 @@ def ff2021_nov():
         find_all_festival_2021_nov = word.get_text()
         all_2021_nov.append(find_all_festival_2021_nov)
 
-    # cleaning data all_2021_nov
+    # deleting irrelevant data
     all_2021_nov = all_2021_nov[6:-7]
     all_2021_nov = [string for string in all_2021_nov if string.strip()]
     all_2021_nov = [i for i in all_2021_nov if i != 'Learn more  | Instagram']
@@ -428,7 +436,7 @@ def ff2021_nov():
 
     # spliting original date format to start date and end date
     dates2_2021_nov = [i.split('-') for i in dates_2021_nov]
-
+    
     for i in range(len(dates2_2021_nov)):
         dates2_2021_nov[i][1] = re.sub(r'(?:, 2021 \| [A-z, &\(\)äöüÄŠńžÖÜâßŽ\’]+)', '', dates2_2021_nov[i][1])
         if len(dates2_2021_nov[i]) == 1:
@@ -446,6 +454,7 @@ def ff2021_nov():
             i[j] = str(i[j] + ' 2021')
 
     return festivals_2021_nov, dates2_2021_nov
+
 
 # Joining 2021 Film Festivals
 def ff2021():
@@ -484,10 +493,12 @@ def ff2021():
 
     return ff2021
 
-# the original dataset was downloaded form https://docs.google.com/spreadsheets/d/1lEBkMsbXHu-TwZlPZBSVUn8GQDmzT2ADr74CBa92txE/edit#gid=205447644
-# Since there were a lot of changes due to COVID-19, a certain amount of manual data cleaning was done to the dataset
+
+# Importing 2020 film festivals
 def ff2020():
-    # Import film festivals 2020 data
+    # the original dataset was downloaded form https://docs.google.com/spreadsheets/d/1lEBkMsbXHu-TwZlPZBSVUn8GQDmzT2ADr74CBa92txE/edit#gid=205447644
+    # Since there were a lot of changes due to COVID-19, a certain amount of manual data cleaning was done to the dataset
+    # I deleted the data with no specific dates and corrected the date changes because of COVID-19
     ff2020_df = pd.read_csv('../data/ff2020.csv')
 
     # formatting date for film festivals 2020
@@ -497,6 +508,7 @@ def ff2020():
     ff2020_df['End_Date'] = ff2020_df['End_Date'].dt.strftime('%Y-%m-%d')
 
     return ff2020_df
+
 
 # Creating a dataframe that contains all film festivals and the dates
 def ff_all():
@@ -519,14 +531,15 @@ def ff_all():
     # joining ff2020, ff2021, ff2022
     df_filmfestivals = pd.concat([ff2020_df, ff2021_df, ff2022_df], ignore_index = True)
 
-    # # Create Event_Date column to indicate all the dates with film festivals
+    # Create Event_Date column that contains a sequence of dates between start dates and end dates
     df_filmfestivals1 = df_filmfestivals.assign(Event_Date = [pd.date_range(start, end, freq = '1d') for start, end in zip(
     df_filmfestivals['Start_Date'], df_filmfestivals['End_Date'])]).explode('Event_Date')
 
     return df_filmfestivals1
 
+
+# Import pixstory data
 def pixstory_data():
-    # Import pixstory data
     pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv')
 
     # Change the format of 'Account Created Date' to '%Y-%m-%d'
@@ -535,7 +548,8 @@ def pixstory_data():
 
     return pixstory_df
 
-# Join pixstory dataset with sport event dataset
+
+# Join pixstory dataset with film festival dataset
 def post_filmfestival_date_match():
     # Prepare for the two data to be merged
     pixstory_date = pixstory_data()['Account Created Date'].unique()
