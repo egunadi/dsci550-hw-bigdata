@@ -532,24 +532,16 @@ def ff_all():
     df_filmfestivals = pd.concat([ff2020_df, ff2021_df, ff2022_df], ignore_index = True)
 
     # Create Event_Date column that contains a sequence of dates between start dates and end dates
+    # modyfied from original code by Shih-Min Huang in sporting_event.py
     df_filmfestivals1 = df_filmfestivals.assign(Event_Date = [pd.date_range(start, end, freq = '1d') for start, end in zip(
     df_filmfestivals['Start_Date'], df_filmfestivals['End_Date'])]).explode('Event_Date')
 
     return df_filmfestivals1
 
 
-# Import pixstory data
-def pixstory_data():
-    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv')
-
-    # Change the format of 'Account Created Date' to '%Y-%m-%d'
-    pixstory_df['Account Created Date'] = pd.to_datetime(pixstory_df['Account Created Date'])
-    pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].dt.strftime('%Y-%m-%d')
-
-    return pixstory_df
-
-
+from sporting_events import pixstory_data
 # Join pixstory dataset with film festival dataset
+# modyfied from original code by Shih-Min Huang in sporting_event.py
 def post_filmfestival_date_match():
     # Prepare for the two data to be merged
     pixstory_date = pixstory_data()['Account Created Date'].unique()
