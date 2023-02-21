@@ -484,14 +484,13 @@ def ff2021():
 
     return ff2021
 
-# formatting date for film festivals 2020
 # the original dataset was downloaded form https://docs.google.com/spreadsheets/d/1lEBkMsbXHu-TwZlPZBSVUn8GQDmzT2ADr74CBa92txE/edit#gid=205447644
 # Since there were a lot of changes due to COVID-19, a certain amount of manual data cleaning was done to the dataset
 def ff2020():
     # Import film festivals 2020 data
     ff2020_df = pd.read_csv('../data/ff2020.csv')
 
-    # Change the format to '%Y-%m-%d'
+    # formatting date for film festivals 2020
     ff2020_df['Start_Date'] = pd.to_datetime(ff2020_df['Start_Date'])
     ff2020_df['Start_Date'] = ff2020_df['Start_Date'].dt.strftime('%Y-%m-%d')
     ff2020_df['End_Date'] = pd.to_datetime(ff2020_df['End_Date'])
