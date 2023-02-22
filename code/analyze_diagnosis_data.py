@@ -3,54 +3,65 @@ import pandas as pd
 diagnosis_filepath = '../data/sex_age_diagnosis/sex_age_diagnosis_processed.json'
 pixstory_filepath = '../data/pixstory/pixstory_clean.csv'
 
-# import data
-diagnosis_df = pd.read_json(diagnosis_filepath)
+def get_pixstory_dx_mapping():
+    # import data
+    diagnosis_df = pd.read_json(diagnosis_filepath)
 
-pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
-pixstory_df.columns = pixstory_df.columns.str.replace(' ', '')
-pixstory_df['Gender'] = pixstory_df['Gender'].str.replace('male', 'M')
-pixstory_df['Gender'] = pixstory_df['Gender'].str.replace('female', 'F')
+    pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
+    pixstory_df['Gender'] = pixstory_df['Gender'].str.replace('male', 'M')
+    pixstory_df['Gender'] = pixstory_df['Gender'].str.replace('female', 'F')
 
-# print(diagnosis_df)
 
-# process data
-diagnosis_count_df = diagnosis_df.groupby(['sex', 'age_from', 'age_to', 'diagnosis'])['diagnosis'] \
-                                    .count() \
-                                    .reset_index(name = 'count')
+    # process data
+    diagnosis_count_df = diagnosis_df.groupby(['sex', 'age_from', 'age_to', 'diagnosis'])['diagnosis'] \
+                                        .count() \
+                                        .reset_index(name = 'count')
 
-# print(diagnosis_count_df.to_string())
 
-diagnosis_count_df['count_rank'] = diagnosis_count_df.groupby(['sex', 'age_from', 'age_to'])['count'] \
-                                                        .rank(ascending = False, method = 'first') \
-                                                        .astype('int')
+    diagnosis_count_df['count_rank'] = diagnosis_count_df.groupby(['sex', 'age_from', 'age_to'])['count'] \
+                                                            .rank(ascending = False, method = 'first') \
+                                                            .astype('int')
 
-# print(diagnosis_count_df)
 
-diagnosis_top_filter_df = diagnosis_count_df.groupby(['sex', 'age_from', 'age_to'])['count_rank'] \
-                                            .nsmallest(3) \
-                                            .reset_index() \
-                                            .set_index('level_3') # retain original index
+    diagnosis_top_filter_df = diagnosis_count_df.groupby(['sex', 'age_from', 'age_to'])['count_rank'] \
+                                                .nsmallest(3) \
+                                                .reset_index() \
+                                                .set_index('level_3') # retain original index
 
-# print(diagnosis_top_filter_df)
+    diagnosis_count_df = diagnosis_count_df[diagnosis_count_df.index.isin(diagnosis_top_filter_df.index)]
 
-diagnosis_count_df = diagnosis_count_df[diagnosis_count_df.index.isin(diagnosis_top_filter_df.index)]
+    pixstory_diagnosis_df = pd.merge(   pixstory_df, diagnosis_count_df, 
+                                        left_on='Gender', right_on='sex'    )
 
-# print(diagnosis_count_df.to_string())
+    pixstory_diagnosis_df = pixstory_diagnosis_df[  (pixstory_diagnosis_df['Age'] >= pixstory_diagnosis_df['age_from']) 
+                                                    & (pixstory_diagnosis_df['Age'] <= pixstory_diagnosis_df['age_to']) ]
 
-# pixstory_diagnosis_df = pd.merge(pixstory_df.assign(key=0), diagnosis_count_df.assign(key=0), on='key').drop('key', axis=1)
-pixstory_diagnosis_df = pd.merge(   pixstory_df, diagnosis_count_df, 
-                                    left_on='Gender', right_on='sex'    )
+    pixstory_primary_diagnosis_df = pixstory_diagnosis_df[pixstory_diagnosis_df['count_rank'] == 1].set_index('Story Primary ID')
+    pixstory_primary_diagnosis_df = pixstory_primary_diagnosis_df['diagnosis'].reset_index(name = 'diagnosis_1')
 
-# print(pixstory_diagnosis_df.columns)
+    pixstory_secondary_diagnosis_df = pixstory_diagnosis_df[pixstory_diagnosis_df['count_rank'] == 2].set_index('Story Primary ID')
+    pixstory_secondary_diagnosis_df = pixstory_secondary_diagnosis_df['diagnosis'].reset_index(name = 'diagnosis_2')
 
-pixstory_diagnosis_df = pixstory_diagnosis_df[  (pixstory_diagnosis_df['Age'] >= pixstory_diagnosis_df['age_from']) 
-                                                & (pixstory_diagnosis_df['Age'] <= pixstory_diagnosis_df['age_to']) ]
+    dx_1_and_2_df = pd.merge(   pixstory_primary_diagnosis_df, pixstory_secondary_diagnosis_df,
+                                on='Story Primary ID' )
 
-# print(pixstory_diagnosis_df.head(5).to_string())
+    pixstory_tertiary_diagnosis_df = pixstory_diagnosis_df[pixstory_diagnosis_df['count_rank'] == 3].set_index('Story Primary ID')
+    pixstory_tertiary_diagnosis_df = pixstory_tertiary_diagnosis_df['diagnosis'].reset_index(name = 'diagnosis_3')
 
-pixstory_primary_diagnosis_df = pixstory_diagnosis_df[pixstory_diagnosis_df['count_rank'] == 1].set_index('StoryPrimaryID')
+    dx_1_2_and_3_df = pd.merge( dx_1_and_2_df, pixstory_tertiary_diagnosis_df,
+                                on='Story Primary ID' )
 
-print(pixstory_primary_diagnosis_df.head(5))
+    return dx_1_2_and_3_df
 
-# if __name__ == '__main__':
-#     analyze_data()
+def flag_pixstory_dx():
+    pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
+    
+    dx_1_2_and_3_df = get_pixstory_dx_mapping()
+
+    # print(sarc_count_df.head(5))
+    pixstory_df = pixstory_df.merge(dx_1_2_and_3_df, on='Story Primary ID')
+
+    pixstory_df.to_csv('../data/pixstory/pixstory_dx.csv', encoding='utf-8', index=False)
+
+if __name__ == '__main__':
+    flag_pixstory_dx()
