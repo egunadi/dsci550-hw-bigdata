@@ -3,16 +3,16 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+pixstory_df_path = '../data/pixstory/pixstory_clean.csv'
+
 def pixstory_data():
     # Import pixstory data
-    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv')
+    pixstory_df = pd.read_csv(pixstory_df_path)
 
     # Change the format of 'Account Created Date' to '%Y-%m-%d'
     pixstory_df['Account Created Date'] = pd.to_datetime(pixstory_df['Account Created Date'])
     pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].dt.strftime('%Y-%m-%d')
 
-    # Make sure the dates matching with assignment instruction
-    # print(pixstory_df['Account Created Date'].agg([max, min])) 
     return pixstory_df
 
 
