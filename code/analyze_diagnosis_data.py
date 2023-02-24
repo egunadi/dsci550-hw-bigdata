@@ -6,10 +6,10 @@ pixstory_filepath = '../data/pixstory/pixstory_clean.csv'
 def get_pixstory_dx_mapping():
     # import data
     diagnosis_df = pd.read_json(diagnosis_filepath)
+    diagnosis_df['sex'] = diagnosis_df['sex'].str.replace('M', 'male')
+    diagnosis_df['sex'] = diagnosis_df['sex'].str.replace('F', 'female')
 
     pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
-    pixstory_df['Gender'] = pixstory_df['Gender'].str.replace('male', 'M')
-    pixstory_df['Gender'] = pixstory_df['Gender'].str.replace('female', 'F')
 
     # process data
     diagnosis_count_df = diagnosis_df.groupby(['sex', 'age_from', 'age_to', 'diagnosis'])['diagnosis'] \
