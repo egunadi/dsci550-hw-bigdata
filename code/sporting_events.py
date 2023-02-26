@@ -3,19 +3,19 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+pixstory_df_path = '../data/pixstory/pixstory_clean.csv'
+
+# Import pixstory data
 def pixstory_data():
-    # Import pixstory data
-    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv')
+    pixstory_df = pd.read_csv(pixstory_df_path)
 
     # Change the format of 'Account Created Date' to '%Y-%m-%d'
     pixstory_df['Account Created Date'] = pd.to_datetime(pixstory_df['Account Created Date'])
     pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].dt.strftime('%Y-%m-%d')
 
-    # Make sure the dates matching with assignment instruction
-    # print(pixstory_df['Account Created Date'].agg([max, min])) 
     return pixstory_df
 
-
+# Parse the website
 def web_parsing(url):
     # Parse the table from the website
     page = requests.get(url)
@@ -40,11 +40,6 @@ def web_parsing(url):
 
     return parsed_df
 
-# Test on the above function:
-# url = 'https://www.topendsports.com/events/calendar-2020.htm'
-# sport_events_2020 = web_parsing(url)
-# print(sport_events_2020)
-
 
 # Parse pages of sporting events from 2020 to 2022
 def sport_event_parsing(start_year, end_year):
@@ -58,11 +53,6 @@ def sport_event_parsing(start_year, end_year):
         sport_event_all = pd.concat([sport_event_all, sport_event], sort=False)
 
     return sport_event_all.reset_index(drop=True)
-
-
-# Test on the above function:
-# df = sport_event_parsing(2020, 2022)
-# print(df)
 
 
 # Data cleaning for the 'Date(s)' column
