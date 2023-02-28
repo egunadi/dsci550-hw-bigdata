@@ -54,10 +54,12 @@ def sport_event_parsing(start_year, end_year):
 
     return sport_event_all.reset_index(drop=True)
 
+start_year = 2020
+end_year = 2022
 
 # Data cleaning for the 'Date(s)' column
 def sport_event_dates():
-    sport_event_all = sport_event_parsing(2020, 2022)
+    sport_event_all = sport_event_parsing(start_year, end_year)
 
     # Data cleaning
     sport_event_all['Date(s)'] = sport_event_all['Date(s)'].str.strip()
@@ -106,5 +108,9 @@ def post_event_date_match():
     pixstory_df = pixstory_data()
     pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].astype('datetime64[ns]')
     post_event_date_match = pd.merge(pixstory_df, df, on=['Account Created Date'], how='left')
-    
+    post_event_date_match = post_event_date_match.rename(columns={"Event": "sport_event"})
+
     return post_event_date_match
+
+if __name__ == '__main__':
+    post_event_date_match()
