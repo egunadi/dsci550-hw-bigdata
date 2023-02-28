@@ -80,3 +80,6 @@ def merge_AD_indexes():
     pixstory_adindex_age_sex = pd.concat([df_concat , df.set_index(df_concat.index)], axis=1)
 
     return pixstory_adindex_age_sex
+
+if __name__ == '__main__':
+    merge_AD_indexes()
