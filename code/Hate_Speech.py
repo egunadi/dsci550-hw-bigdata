@@ -102,6 +102,5 @@ def flag_pixstory_hate():
 if __name__ == '__main__':
     flag_pixstory_hate()
 
-flag_pixstory_hate()
 
 
