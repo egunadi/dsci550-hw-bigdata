@@ -2,6 +2,7 @@
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from collections import defaultdict
 
 # parse websites
 def web_parsing(URL, para, attr):
@@ -46,28 +47,61 @@ def gen_flagged_words():
 
     return GLAAD_list, ADL_list
 
+# the following code was done with Eben's guidance
+def import_pixstory():
+    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv', delimiter=',', encoding='utf-8')
+    pixstory_df.columns = pixstory_df.columns.str.replace(' ', '')
+    pixstory_df['Narrative'] = pixstory_df['Narrative'].astype(str)
 
-def pixstory_data():
-    # Import pixstory data
-    pixstory_df = pd.read_csv('.../data/pixstory/pixstory.csv', delimiter=',', encoding='utf-8')
-    narrative = pixstory_df.loc[:,"Narrative"]
+    narrative_dict = defaultdict(dict)
 
-    GLAAD_hate_speech = False
+    for pixstory in pixstory_df.itertuples():
+        narrative_dict[pixstory.StoryPrimaryID] = pixstory.Narrative.split()
 
-    i = 1
+    narrative_dict = dict(narrative_dict)
+    return narrative_dict
 
+
+def get_pixstory_hate():
     GLAAD_list, ADL_list = gen_flagged_words()
-    while i in narrative:
-        if any(GLAAD_list) in i.getkey:
-            GLAAD_hate_speech[i] = True
+    narrative_dict = import_pixstory()
+
+    GLAAD_count_dict = defaultdict(dict)
+
+    for StoryPrimaryID, words in narrative_dict.items():
+        if len(set(GLAAD_list).intersection(set(words))) >= 1:
+            GLAAD_count_dict[StoryPrimaryID] = True
         else:
-            GLAAD_hate_speech[i] = False
+            GLAAD_count_dict[StoryPrimaryID] = False
 
-        i = i + 1
+    ADL_count_dict = defaultdict(dict)
 
-    return GLAAD_hate_speech
+    for StoryPrimaryID, words in narrative_dict.items():
+        if len(set(ADL_list).intersection(set(words))) >= 1:
+            ADL_count_dict[StoryPrimaryID] = True
+        else:
+            ADL_count_dict[StoryPrimaryID] = False
 
-k = pixstory_data()
-print(k)
+    return dict(GLAAD_count_dict), dict(ADL_count_dict)
+
+
+def flag_pixstory_hate():
+    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv', delimiter=',', encoding='utf-8')
+
+    GLAAD_count_dict, ADL_count_dict = get_pixstory_hate()
+
+    GLAAD_count_df = pd.DataFrame(GLAAD_count_dict.items(), columns=['Story Primary ID', 'GLAAD'])
+    ADL_count_df = pd.DataFrame(ADL_count_dict.items(), columns=['Story Primary ID', 'ADL'])
+
+    pixstory_df = pixstory_df.merge(GLAAD_count_df, on='Story Primary ID')
+    pixstory_df = pixstory_df.merge(ADL_count_df, on='Story Primary ID')
+
+    pixstory_df.to_csv('../data/pixstory/pixstory_hate.csv', encoding='utf-8', index=False)
+
+
+if __name__ == '__main__':
+    flag_pixstory_hate()
+
+flag_pixstory_hate()
 
 
