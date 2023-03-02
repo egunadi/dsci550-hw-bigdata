@@ -53,34 +53,37 @@ def merge_AD_indexes():
 
     # First, merge with indexes on age
     df = pd.DataFrame()
-    for age in pixstory_df['Age']:
+    for age in pixstory_df['Age'].unique():
         for i in range(len(adindex_age)):
             if age >= int(adindex_age.loc[i, "start_age"]) and age <= int(adindex_age.loc[i, "end_age"]):
                 lst_age = list(adindex_age[["ADI_age", "DDI_age", "ADDI_age"]].iloc[i])
+                lst_age.append(age)
                 df_age = pd.DataFrame([lst_age])
                 df = pd.concat([df, df_age])
                 break
     
-    df.columns = ["ADI_age", "DDI_age", "ADDI_age"]
-    df_concat = pd.concat([pixstory_df , df.set_index(pixstory_df.index)], axis=1)
+    df.columns = ["ADI_age", "DDI_age", "ADDI_age", "Age"]
+    df_concat = pd.merge(pixstory_df, df, on=['Age'], how='left')
 
     # Secondly, merge with indexes on sex
     df = pd.DataFrame()
-    for gender in df_concat['Gender']:
+    for gender in pixstory_df['Gender'].unique():
         for i in range(len(adindex_sex)):
             if gender == adindex_sex.loc[i, "sex"]:
                 lst_sex = list(adindex_sex[["ADI_sex", "DDI_sex", "ADDI_sex"]].iloc[i])
+                lst_sex.append(gender)
                 df_sex = pd.DataFrame([lst_sex])
                 df = pd.concat([df, df_sex])
                 break
             elif i == 2 and pd.isnull(gender):
                 lst_sex = list(adindex_sex[["ADI_sex", "DDI_sex", "ADDI_sex"]].iloc[2])
+                lst_sex.append(gender)
                 df_sex = pd.DataFrame([lst_sex])
                 df = pd.concat([df, df_sex])
                 break
 
-    df.columns = ["ADI_sex", "DDI_sex", "ADDI_sex"]
-    pixstory_adindex_age_sex = pd.concat([df_concat , df.set_index(df_concat.index)], axis=1)
+    df.columns = ["ADI_sex", "DDI_sex", "ADDI_sex", "Gender"]
+    pixstory_adindex_age_sex = pd.merge(df_concat, df, on=['Gender'], how='left')
 
     pixstory_adindex_age_sex.to_csv('../data/pixstory/pixstory_adindex.csv', encoding='utf-8', index=False)
 
