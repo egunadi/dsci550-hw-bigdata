@@ -1,7 +1,7 @@
 import pandas as pd
 
 diagnosis_filepath = '../data/sex_age_diagnosis/sex_age_diagnosis_processed.json'
-pixstory_filepath = '../data/pixstory/pixstory_clean.csv'
+pixstory_filepath = '../data/pixstory/pixstory_sarc.csv'
 
 def get_pixstory_dx_mapping():
     # import data
@@ -58,11 +58,11 @@ def get_pixstory_dx_mapping():
     return dx_1_2_and_3_df
 
 def flag_pixstory_dx():
-    pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8')
+    pixstory_df = pd.read_csv(pixstory_filepath, delimiter=',', encoding='utf-8').drop_duplicates()
     
-    dx_1_2_and_3_df = get_pixstory_dx_mapping()
+    dx_1_2_and_3_df = get_pixstory_dx_mapping().drop_duplicates()
 
-    pixstory_df = pixstory_df.merge(dx_1_2_and_3_df, on='Story Primary ID')
+    pixstory_df = pixstory_df.merge(dx_1_2_and_3_df, on='Story Primary ID', how='left')
 
     pixstory_df.to_csv('../data/pixstory/pixstory_dx.csv', encoding='utf-8', index=False)
 

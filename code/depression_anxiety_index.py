@@ -1,4 +1,3 @@
-import sporting_events
 import pandas as pd
 
 anxiety_depression_path = '../data/Anxiety_Depression_Index/Indicators_of_Anxiety_or_Depression_Based_on_Reported_Frequency_of_Symptoms_During_Last_7_Days.csv'
@@ -40,11 +39,15 @@ def clean_AD_data():
     adindex_sex['sex'] = adindex_sex['sex'].str.replace('Female', 'female')
     return adindex_age, adindex_sex
 
-# Import pixstory data
-pixstory_df = sporting_events.pixstory_data()
-
 ## Merge pixstory dataset w/ adindex_age (anxiety & depression index on age)
 def merge_AD_indexes():
+    # Import pixstory data
+    pixstory_df_path = '../data/pixstory/pixstory_hobby.csv'
+    pixstory_df = pd.read_csv(pixstory_df_path)
+    
+    # Change the format of 'Account Created Date' to '%Y-%m-%d'
+    pixstory_df['Account Created Date'] = pd.to_datetime(pixstory_df['Account Created Date'])
+    pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].dt.strftime('%Y-%m-%d')
 
     adindex_age, adindex_sex = clean_AD_data()
 
@@ -79,7 +82,7 @@ def merge_AD_indexes():
     df.columns = ["ADI_sex", "DDI_sex", "ADDI_sex"]
     pixstory_adindex_age_sex = pd.concat([df_concat , df.set_index(df_concat.index)], axis=1)
 
-    return pixstory_adindex_age_sex
+    pixstory_adindex_age_sex.to_csv('../data/pixstory/pixstory_adindex.csv', encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     merge_AD_indexes()

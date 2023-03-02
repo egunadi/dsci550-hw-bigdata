@@ -49,7 +49,7 @@ def gen_flagged_words():
 
 # the following code was done with Eben's guidance
 def import_pixstory():
-    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv', delimiter=',', encoding='utf-8')
+    pixstory_df = pd.read_csv('../data/pixstory/pixstory_film.csv', delimiter=',', encoding='utf-8')
     pixstory_df.columns = pixstory_df.columns.str.replace(' ', '')
     pixstory_df['Narrative'] = pixstory_df['Narrative'].astype(str)
 
@@ -86,15 +86,15 @@ def get_pixstory_hate():
 
 
 def flag_pixstory_hate():
-    pixstory_df = pd.read_csv('../data/pixstory/pixstory.csv', delimiter=',', encoding='utf-8')
+    pixstory_df = pd.read_csv('../data/pixstory/pixstory_film.csv', delimiter=',', encoding='utf-8')
 
     GLAAD_count_dict, ADL_count_dict = get_pixstory_hate()
 
     GLAAD_count_df = pd.DataFrame(GLAAD_count_dict.items(), columns=['Story Primary ID', 'GLAAD'])
     ADL_count_df = pd.DataFrame(ADL_count_dict.items(), columns=['Story Primary ID', 'ADL'])
 
-    pixstory_df = pixstory_df.merge(GLAAD_count_df, on='Story Primary ID')
-    pixstory_df = pixstory_df.merge(ADL_count_df, on='Story Primary ID')
+    pixstory_df = pixstory_df.merge(GLAAD_count_df, on='Story Primary ID', how='left')
+    pixstory_df = pixstory_df.merge(ADL_count_df, on='Story Primary ID', how='left')
 
     pixstory_df.to_csv('../data/pixstory/pixstory_hate.csv', encoding='utf-8', index=False)
 

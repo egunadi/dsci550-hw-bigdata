@@ -538,13 +538,15 @@ def ff_all():
 
     return df_filmfestivals1
 
-
-from sporting_events import pixstory_data
-# Join pixstory dataset with film festival dataset
-# modyfied from original code by Shih-Min Huang in sporting_event.py
 def post_filmfestival_date_match():
     # Prepare for the two data to be merged
-    pixstory_date = pixstory_data()['Account Created Date'].unique()
+    pixstory_df_path = '../data/pixstory/pixstory_sports.csv'
+    pixstory_df = pd.read_csv(pixstory_df_path)
+
+    # Change the format of 'Account Created Date' to '%Y-%m-%d'
+    pixstory_df['Account Created Date'] = pd.to_datetime(pixstory_df['Account Created Date'])
+    pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].dt.strftime('%Y-%m-%d')
+    pixstory_date = pixstory_df['Account Created Date'].unique()
     pixstory_date = pd.DataFrame({'Account Created Date': pixstory_date})
     filmfestivals_df = ff_all()[['Event_Date', 'Festivals']]
 
@@ -557,12 +559,11 @@ def post_filmfestival_date_match():
     df = new_joined_df.groupby(['Account Created Date']).agg({'Festivals': lambda x: x.tolist()}).reset_index(level = 0)
 
     # Merge the corresponding table with the original pixstory dataset
-    pixstory_df = pixstory_data()
+    pixstory_df = pd.read_csv(pixstory_df_path)
     pixstory_df['Account Created Date'] = pixstory_df['Account Created Date'].astype('datetime64[ns]')
     post_filmfestival_date_match = pd.merge(pixstory_df, df, on = ['Account Created Date'], how = 'left')
 
-    return post_filmfestival_date_match
-
+    post_filmfestival_date_match.to_csv('../data/pixstory/pixstory_film.csv', encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     post_filmfestival_date_match()

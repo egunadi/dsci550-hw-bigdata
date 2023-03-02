@@ -110,7 +110,7 @@ def post_event_date_match():
     post_event_date_match = pd.merge(pixstory_df, df, on=['Account Created Date'], how='left')
     post_event_date_match = post_event_date_match.rename(columns={"Event": "sport_event"})
 
-    return post_event_date_match
+    post_event_date_match.to_csv('../data/pixstory/pixstory_sports.csv', encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     post_event_date_match()

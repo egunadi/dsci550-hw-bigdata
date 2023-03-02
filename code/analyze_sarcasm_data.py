@@ -5,7 +5,7 @@ import pandas as pd
 from collections import defaultdict
 
 sarc_directory_path = "../data/sarcasm/data-sarc-sample/sarc"
-pixstory_filepath = "../data/pixstory/pixstory_clean.csv"
+pixstory_filepath = "../data/pixstory/pixstory_hate.csv"
 
 def get_terms(directory_path: str) -> list:
     text_files = glob.glob(f"{directory_path}/*.txt")
@@ -83,7 +83,7 @@ def flag_pixstory_sarc():
     sarc_count_df = pd.DataFrame(sarc_count_dict.items(), columns=['Story Primary ID', 'sarc'])
 
     # print(sarc_count_df.head(5))
-    pixstory_df = pixstory_df.merge(sarc_count_df, on='Story Primary ID')
+    pixstory_df = pixstory_df.merge(sarc_count_df, on='Story Primary ID', how='left')
 
     pixstory_df.to_csv('../data/pixstory/pixstory_sarc.csv', encoding='utf-8', index=False)
 
