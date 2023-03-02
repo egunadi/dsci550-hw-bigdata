@@ -18,10 +18,6 @@ def joinHobbiesToPix():
     merged_df = pd.merge(merged_df, least_likely, on=['age', 'sex'])
     
     merged_df = merged_df.rename(columns={'age': 'Age'})
-    # merged_df['Age'] = pixstory_df['Age'].astype(int)
-    
-    # pixstory_df['Age'] = pixstory_df['Age'].astype(int)
-    
     merged_df = merged_df.rename(columns={'sex': 'Gender'})
     
     merged_df['Gender'] = merged_df['Gender'].str.replace('M', 'male')
