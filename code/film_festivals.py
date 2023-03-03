@@ -8,9 +8,7 @@ import re
 # Film Festivals 2022
 def ff2022():
     # Web scraping film festivals 2022
-    URL = "https://www.film-fest-report.com/home/film-festivals-2022"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2022.html', "html.parser")
     all_2022 = []
     for word in soup.find_all('p'):  
         find_all_festival_2022 = word.get_text()
@@ -61,9 +59,7 @@ def ff2022():
 # FEBRUARY 2021
 def ff2021_feb():
     # web scraping
-    URL = "https://www.film-fest-report.com/home/film-festivals-february-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_feb.html', "html.parser")
     all_2021_feb = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_feb = word.get_text()
@@ -117,9 +113,7 @@ def ff2021_feb():
 # MARCH 2021
 def ff2021_mar():
     # web scraping
-    URL = "https://www.film-fest-report.com/home/film-festivals-march-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_mar.html', "html.parser")
     all_2021_mar = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_mar = word.get_text()
@@ -167,9 +161,7 @@ def ff2021_mar():
 # APRIL 2021
 def ff2021_apr():
     # web scraping
-    URL = "https://www.film-fest-report.com/home/film-festivals-april-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_apr.html', "html.parser")
     all_2021_apr = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_apr = word.get_text()
@@ -213,9 +205,7 @@ def ff2021_apr():
 # MAY 2021
 def ff2021_may():
     # web scraping
-    URL = "https://www.film-fest-report.com/home/film-festivals-may-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_may.html', "html.parser")
     all_2021_may = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_may = word.get_text()
@@ -259,9 +249,7 @@ def ff2021_may():
 # JUNE 2021
 def ff2021_jun():
     # web scraping 2021 jun
-    URL = "https://www.film-fest-report.com/home/film-festivals-june-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_jun.html', "html.parser")
     all_2021_jun = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_jun = word.get_text()
@@ -305,9 +293,7 @@ def ff2021_jun():
 # JULY 2021
 def ff2021_july():
     # web scraping 2021 july
-    URL = "https://www.film-fest-report.com/home/film-festivals-july-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_july.html', "html.parser")
     all_2021_july = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_july = word.get_text()
@@ -353,9 +339,7 @@ def ff2021_july():
 # OCTOBER 2021
 def ff2021_oct():
     # web scraping
-    URL = "https://www.film-fest-report.com/home/film-festivals-october-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_oct.html', "html.parser")
     all_2021_oct = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_oct = word.get_text()
@@ -403,9 +387,7 @@ def ff2021_oct():
 # NOVEMBER 2021
 def ff2021_nov():
     # web scraping 2021 nov
-    URL = "https://www.film-fest-report.com/home/film-festivals-november-2021"
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup('../data/ff2021_nov.html', "html.parser")
     all_2021_nov = []
     for word in soup.find_all('p'):  
         find_all_festival_2021_nov = word.get_text()
