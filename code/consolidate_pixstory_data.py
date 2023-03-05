@@ -25,9 +25,12 @@ def consolidate_pixstory_data():
     # export data
     pixstory_df.to_csv('../data/pixstory/pixstory.csv', encoding='utf-8', index=False)
 
-def convert_csv_to_tsv():
-    with    open('../data/pixstory/pixstory.csv', 'r', encoding='utf-8') as csvin, \
-            open('../data/pixstory/pixstory.tsv', 'w', encoding='utf-8') as tsvout:
+def convert_csv_to_tsv(input_file, output_file):
+    input_path = '../data/pixstory/' + input_file
+    output_path = '../data/pixstory/' + output_file
+    
+    with    open(input_path, 'r', encoding='utf-8') as csvin, \
+            open(output_path, 'w', encoding='utf-8') as tsvout:
                 csvin = csv.reader(csvin)
                 tsvout = csv.writer(tsvout, dialect='excel-tab')
  

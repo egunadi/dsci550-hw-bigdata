@@ -13,7 +13,7 @@ if __name__ == '__main__':
     
     # 2. consolidate and scrub pixstory data
     consolidate_pixstory_data.consolidate_pixstory_data()
-    consolidate_pixstory_data.convert_csv_to_tsv()
+    consolidate_pixstory_data.convert_csv_to_tsv('pixstory.csv', 'pixstory_original.tsv')
     scrub_pixstory_data.scrub_pixstory_data()
     
     # 3. add features (may need to run one at a time)
@@ -23,5 +23,8 @@ if __name__ == '__main__':
     analyze_sarcasm_data.flag_pixstory_sarc()
     analyze_diagnosis_data.flag_pixstory_dx()
     analyze_hobby_data.joinHobbiesToPix()
-    depression_anxiety_index.merge_AD_indexes() 
+    depression_anxiety_index.merge_AD_indexes()
+    
+    # 4. convert final csv to tsv
+    consolidate_pixstory_data.convert_csv_to_tsv('pixstory_adindex.csv', 'pixstory_final.tsv')
     
