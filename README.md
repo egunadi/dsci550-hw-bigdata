@@ -255,7 +255,7 @@ Results can be reproduced via "code/main.py", which runs the following functions
   - Consolidates all Pixstory files into "data/pixstory/pixstory.csv"
   - Worked on by Eben Gunadi 
 - consolidate_pixstory_data.convert_csv_to_tsv()
-  - Uses "data/pixstory/pixstory.csv" to create "data/pixstory/pixstory.tsv"
+  - Uses "data/pixstory/pixstory.csv" to create "data/pixstory/pixstory_original.tsv"
   - Worked on by Eben Gunadi 
 - scrub_pixstory_data.scrub_pixstory_data()
   - Uses "data/pixstory/pixstory.csv" to create "data/pixstory/pixstory_clean.csv" (see "Data Cleaning" section of our report for details)
@@ -286,3 +286,9 @@ Results can be reproduced via "code/main.py", which runs the following functions
   - Worked on by Shih-Min (Julia) Huang
 
 Being the last csv created, "data/pixstory/pixstory_adindex.csv" contains all the features generated in this project.
+
+### Tika Similarity analysis
+
+- consolidate_pixstory_data.convert_csv_to_tsv()
+  - Uses "data/pixstory/pixstory_adindex.csv" to create "data/pixstory/pixstory_final.tsv"
+  - Worked on by Eben Gunadi 
