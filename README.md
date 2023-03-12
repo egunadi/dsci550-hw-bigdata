@@ -304,8 +304,10 @@ Being the last csv created, "data/pixstory/pixstory_adindex.csv" contains all th
 
 To process "data/pixstory/pixstory_final.tsv" we need to break up the data into individual JSON files. For ease of processing, these files will be stored in subfolders containing 100 files. 
 
-This process is done by navigating to "etl/json" and running the commands in "etl/shell-commands.sh".
+This process is done by navigating to "etl/json" and running the commands in "etl/shell-commands.sh". Worked on by Lesly Escobar, Eben Gunadi, and Yi Chang.
 
+#### Cluster Data via Circle Parking
 
+"analysis/shell-commands.sh" lists shell/terminal commands that were used inside "analysis/data" to produce the visualizations seen in "analysis/pdfs". This process was worked on by Lesly Escobar, Eben Gunadi, and Yi Chang.
 
-"analysis/shell-commands.sh" lists shell/terminal commands that were used inside "analysis/data" to produce the visualizations seen in "analysis/pdfs". Our paper details the analysis done on these visualizations.
+Our paper details the analysis done on these visualizations, worked on by Lesly Escobar.
