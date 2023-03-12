@@ -243,6 +243,13 @@ prefix: /Users/egunadi/anaconda3/envs/dsci550
 
 The environment.yml file in GitHub can be used to recreate our environment.
 
+The following modules also need to be installed, along with their dependencies:
+
+- Tika-Python <http://github.com/chrismattmann/tika-python>
+- Tika-Similarity <http://github.com/chrismattmann/tika-similarity>
+- D3.js <http://d3js.org>
+- ETL lib <https://github.com/chrismattmann/etllib>
+
 ## Running the project
 
 If downloading from GitHub, the "data/pixstory" folder will be empty due to proprietary concerns. This data should be obtained directly from Dr. Mattmann and extracted into the folder.
@@ -292,3 +299,13 @@ Being the last csv created, "data/pixstory/pixstory_adindex.csv" contains all th
 - consolidate_pixstory_data.convert_csv_to_tsv()
   - Uses "data/pixstory/pixstory_adindex.csv" to create "data/pixstory/pixstory_final.tsv"
   - Worked on by Eben Gunadi 
+
+#### ETL
+
+To process "data/pixstory/pixstory_final.tsv" we need to break up the data into individual JSON files. For ease of processing, these files will be stored in subfolders containing 100 files. 
+
+This process is done by navigating to "etl/json" and running the commands in "etl/shell-commands.sh".
+
+
+
+"analysis/shell-commands.sh" lists shell/terminal commands that were used inside "analysis/data" to produce the visualizations seen in "analysis/pdfs". Our paper details the analysis done on these visualizations.
