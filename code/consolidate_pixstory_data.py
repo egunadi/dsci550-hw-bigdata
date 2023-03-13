@@ -39,4 +39,5 @@ def convert_csv_to_tsv(input_file, output_file):
 
 if __name__ == '__main__':
     consolidate_pixstory_data()
-    convert_csv_to_tsv()
+    # consolidate_pixstory_data.convert_csv_to_tsv('pixstory.csv', 'pixstory_original.tsv')
+    # consolidate_pixstory_data.convert_csv_to_tsv('pixstory_adindex.csv', 'pixstory_final.tsv')
